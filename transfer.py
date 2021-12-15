@@ -10,16 +10,16 @@ class Conductor:
                            places.Place('Human_domain', places.Point(100.0, 100.0), []),
                            places.Place('Battlefield', places.Point(-100.0, 50.0), [])]
 
-        self.all_humans = [[animals.Human('Kate', 'female', 20, 50, 100,
+        self.all_humans = [[animals.Human('Kate', 'female', 20, 50, 100, [],
                                           [animals.Cat('Myaukalka', 'female', 8, 100, 50, 'Kate', 'Myauk', [], 5)],
                                           self.all_places[0])],
-                           [animals.Human('Luc', 'male', 40, 40, 150,
+                           [animals.Human('Luc', 'male', 40, 40, 150, [],
                                           [animals.Dog('Chase', 'male', 11, 90, 30, 'Luc', 'Bark', [], 5)],
                                           self.all_places[1])],
-                           [animals.Human('Frank', 'male', 15, 10, 10,
+                           [animals.Human('Frank', 'male', 15, 10, 10, [],
                                           [animals.Cat('Pushok', 'male', 1, 20, 1, 'Frank', 'Murr', [], 2)],
                                           self.all_places[2])],
-                           [animals.Human('Marie', 'female', 50, 90, 200,
+                           [animals.Human('Marie', 'female', 50, 90, 200, [],
                                           [animals.Cat('Barsik', 'male', 10, 80, 70, 'Marie', 'Purr', [], 4)],
                                           self.all_places[3])]]
 
@@ -49,26 +49,25 @@ class Conductor:
               "input <yes> and <no>...")
 
         # mne len'
-        user_reply = 'yes'
-        a_name = 'Vasya'
-        a_sex = 'male'
-        a_age = 11
+        # user_reply = 'yes'
+        # a_name = 'Vasya'
+        # a_sex = 'male'
+        # a_age = 11
         # mne len'
 
-        # user_reply = input()
+        user_reply = input()
         if user_reply.lower() == 'yes':
             print("\nYOOOOOOOOOOOOOOOOOO!!!\n\nLet's make your avatar:\n")
             print("Input your name:")
-            # a_name = input()
+            a_name = input()
             print("Input your sex: ")
-            # a_sex = input()
+            a_sex = input()
             print("Input your age:")
-            # a_age = int(input())
+            a_age = int(input())
 
             avatar = animals.Human(a_name, a_sex, a_age, 10, 1, [], [], self.all_places[2])
             self.all_places[2].get_in(avatar)
             self.update()
-            print(type(avatar.pets))
 
             print(f"\nWelcome to Human_domain, {avatar.get_name()}!\n")
 
@@ -129,15 +128,21 @@ class Controller:
         while user_reply > len(sth) or user_reply < 1:
             print("Please, input valid choice")
             user_reply = int(input())
+        new_pet = sth[user_reply - 1]
         while True:
             x = msvcrt.kbhit()
             if x:
                 k = ord(msvcrt.getch())
                 if k == 116:  # <t>
                     if self.education:
-                        print(type(self.avatar.pets), self.avatar.get_name())
-                        # .append(sth[user_reply - 1])
-                        sth[user_reply - 1].get_tamed(self.avatar.get_name())
+                        if self.avatar.level >= new_pet.level and new_pet.owner == 'none':
+                            print(f'Congrats! Your new friend - {new_pet.get_name()}!')
+                            self.avatar.pets.append(new_pet)
+                            new_pet.get_tamed(self.avatar.name)
+                        elif new_pet.owner != 'none':
+                            print("This pet already has an owner!")
+                        else:
+                            print("Sorry, you're too weak...")
                     else:
                         self.avatar.tame(sth[user_reply - 1])
                     break
@@ -148,14 +153,17 @@ class Controller:
 
     def search_pets(self):
         free_pets_a = self.avatar.get_place().get_free_pets()
+        free_av_pets = []
         for i in free_pets_a:
+            if self.avatar.level >= i.level:
+                free_av_pets.append(i)
             print(i.get_info())
         while True:
             print("Would you like to tame anyone of these free_pets?\n"
                   "Input <yes> or <no>:")
             user_reply = input()
             if user_reply.lower() == 'yes':
-                self.tame_sth(free_pets_a)
+                self.tame_sth(free_av_pets)
             else:
                 break
 
@@ -187,6 +195,8 @@ class Controller:
                     self.search_pets()
                 if k == 100:  # <d>
                     end_game = True
+                    break
+                if self.education:
                     break
             else:
                 pass

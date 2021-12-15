@@ -100,7 +100,7 @@ class Arena(Place):
             print(f'{part1.get_name()} runs away from the fight!')
             return
 
-        sp = '\t\t\t\t\t\t\t'
+        sp = '\t\t\t\t\t\t'
 
         buff_stam1 = player1.buff_stam()
         buff_stam2 = player2.buff_stam()

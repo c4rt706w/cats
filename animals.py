@@ -126,11 +126,11 @@ class Dog(Pet):
 
     def get_loyalty(self, human, old_place, new_place):
         trace = new_place.dist(old_place.get_point())
-        quantity = (trace + self.dist % 200) // 200
+        quantity = (trace + int(self.dist) % 200) // 200
         if quantity > 1:
             self.loyalty += quantity
-            self.dist += trace
             print(f"\nCongratulations! {self.name}'s loyalty raised to {self.loyalty}!")
+        self.dist += trace
         for i in range(quantity):
             human.add_equip()
 
@@ -161,7 +161,7 @@ class Human(Animal):
         cond = transfer.Conductor()
         for i in self.pets:
             if type(i).__name__ == 'Dog':
-                i.get_loyalty()
+                i.get_loyalty(self.get_self(), self.place, new_place)
         self.get_place().get_out(self.get_self())
         new_place.get_in(self.get_self())
         self.place = new_place
@@ -189,7 +189,6 @@ class Human(Animal):
         print(f"You received {new_item.get_info()}\n")
 
     def reequip(self):
-        self.show_pets()
         if len(self.equip) == 0:
             print("There is no equipment.")
             return
