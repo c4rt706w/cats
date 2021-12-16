@@ -49,7 +49,7 @@ class Place(City):
         self.humans.append(human)
 
     def random_human(self):
-        return random.choice(self.humans)
+        return random.choice(self.humans)[0]
 
     def get_free_pets(self):
         return self.free_animals
@@ -81,15 +81,19 @@ class Arena(Place):
             return
         print(f'On the Arena {self.name} the battle begins...')
 
+        if len(part1.pets) == 0:
+            print(f"{part1.get_name} hasn't any pets...")
+            return
+
         part2 = self.random_human()
         while part1 == part2:
             part2 = self.random_human()
 
         print(f'On the blue corner of the {self.get_name()} - {part1.get_name()}')
-        print(f'On the red corner of the {self.get_name()} - {part2[0].get_name()}')
+        print(f'On the red corner of the {self.get_name()} - {part2.get_name()}')
 
         player1 = part1.random_pet()
-        player2 = part2[0].random_pet()
+        player2 = part2.random_pet()
 
         print('\nFighter 1:', player1.get_info())
         print('Fighter 2:', player2.get_info())
@@ -155,6 +159,7 @@ class Arena(Place):
               'may cat_God judge them!!!')
         if stam2 <= 0:
             print(f'{player1.get_name()} defeat {player2.get_name()} in the fight!!!')
+            player1.ascension()
         else:
             print(f'{player1.get_name()} die a heroic death in the battle with {player2.get_name()}...',
                   '\nPlease, improve your characteristics...')

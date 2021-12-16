@@ -8,7 +8,7 @@ class Conductor:
         self.all_places = [places.Place('Cat_island', places.Point(-100.0, 50.0), []),
                            places.Place('Dog_tower', places.Point(-20.0, -40.0), []),
                            places.Place('Human_domain', places.Point(100.0, 100.0), []),
-                           places.Place('Battlefield', places.Point(-100.0, 50.0), [])]
+                           places.Place('Battlefield', places.Point(10.0, 10.0), [])]
 
         self.all_humans = [[animals.Human('Kate', 'female', 20, 50, 100, [],
                                           [animals.Cat('Myaukalka', 'female', 8, 100, 50, 'Kate', 'Myauk', [], 5)],

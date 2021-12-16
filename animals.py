@@ -93,11 +93,7 @@ class Cat(Pet):
                        abilities.Skill('Ultimate', self.level, abs(self.luck * 100))]
 
     def rebirth(self):
-        if self.life == 9:
-            print(f"{self.name} can't rebirth.\n",
-                  f"{self.name}lived a good life and died a brave death")
-            return
-        print(f'{self.name} rebirth!!!')
+        print(f'\n{self.name} rebirth!!!')
         self.life += 1
         self.age = 1
         self.stamina = 10
@@ -126,12 +122,12 @@ class Dog(Pet):
 
     def get_loyalty(self, human, old_place, new_place):
         trace = new_place.dist(old_place.get_point())
-        quantity = (trace + int(self.dist) % 200) // 200
-        if quantity > 1:
+        self.dist += trace
+        quantity = self.dist // 200 - self.loyalty
+        if quantity > 0:
             self.loyalty += quantity
             print(f"\nCongratulations! {self.name}'s loyalty raised to {self.loyalty}!")
-        self.dist += trace
-        for i in range(quantity):
+        for i in range(int(quantity)):
             human.add_equip()
 
 
@@ -160,7 +156,9 @@ class Human(Animal):
     def go_to(self, new_place):
         cond = transfer.Conductor()
         for i in self.pets:
+            print(type(i).__name__)
             if type(i).__name__ == 'Dog':
+                print(i.get_name())
                 i.get_loyalty(self.get_self(), self.place, new_place)
         self.get_place().get_out(self.get_self())
         new_place.get_in(self.get_self())
